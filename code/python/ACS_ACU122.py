@@ -9,7 +9,7 @@ class ACS_ACU122(pcsc_reader.PCSC_Reader):
 
       def __init__(self,reader):
           pcsc_reader.PCSC_Reader.__init__(self)
-          self.readerInfo = readerInfo(self.readername,self.hardware,self.supportProtocols,self.supportTagTypes)
+          self.readerInfo = readerInfo(reader.name,self.readername,self.hardware,self.supportProtocols,self.supportTagTypes)
           self.connection = self.getConnectionToTag(reader)
           self.connect(self.connection)
           #set retry time to 1

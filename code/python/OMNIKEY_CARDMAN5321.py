@@ -9,7 +9,7 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
 
       def __init__(self,reader):
           pcsc_reader.PCSC_Reader.__init__(self)
-          self.readerInfo = readerInfo(self.readername,self.hardware,self.supportProtocols,self.supportTagTypes)
+          self.readerInfo = readerInfo(reader.name,self.readername,self.hardware,self.supportProtocols,self.supportTagTypes)
           self.connection = self.getConnectionToTag(reader)
 
       #parameters of OMNIKEY Cardman 5321

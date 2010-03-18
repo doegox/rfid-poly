@@ -1,11 +1,15 @@
 class readerInfo:
 
-    def __init__(self,readerName,hardware,supportProtocols,supportTagTypes):
+    def __init__(self,currentReaderName,readerName,hardware,supportProtocols,supportTagTypes):
+        self.currentReaderName = currentReaderName
         self.readerName = readerName
         self.hardware = hardware
         self.supportProtocols = supportProtocols
         self.supportTagTypes = supportTagTypes
 
+    def getCurrentReaderName(self):
+        return self.currentReaderName
+    
     def getName(self):
         return self.readerName
 

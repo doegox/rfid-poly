@@ -4,4 +4,4 @@ class UIevent:
         self.cmd = cmd
 
     def getCommand(self):
-        return cmd
+        return self.cmd

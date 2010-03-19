@@ -4,12 +4,13 @@ from RTMEvent import RTMevent
 from smartcard.System import *
 from smartcard.util import *
 import string
+import threading,thread
 import time
 
 class readerTagManager:
 
     def __init__(self):
-        pass
+        thread.start_new_thread(self.__update,())
 
     #key - pcsc reader name, map to pcsc reader instance
     pcsc_readerDictionary = {}
@@ -21,9 +22,20 @@ class readerTagManager:
     #event list
     rtmEventList = []
     newEventNum = 0
+    #threading lock
+    lock = threading.Lock()
 
+    def __update(self):
+        while True:
+        #acquire the thread lock
+            self.lock.acquire()
+            self.__updateReaderLists()
+            self.__updateEventList()
+            self.lock.release()
+        #update every 2secs
+            time.sleep(2)
 
-    def getReaderList(self):
+    def __updateReaderLists(self):
         #clear pcsc reader list
         self.pcsc_readerDictionary.clear()
         #get pcsc reader list
@@ -53,14 +65,9 @@ class readerTagManager:
             self.readerDictionary[key] = self.addInDictionary[key]
         for reader in self.moveOutList:
             del self.readerDictionary[reader]
-
+        #----------------------------------------------------------------------------
         
-                
-    def hasNewEvent(self):
-        #check if there are still events that not yet be got
-        if self.newEventNum > 0:
-            return True
-        self.getReaderList()
+    def __updateEventList(self):
         if len(self.addInDictionary.keys()) > 0:
             self.newEventNum += 1
             #make a local list of the global variable addInList
@@ -79,17 +86,35 @@ class readerTagManager:
             del self.moveOutList[:]
         #other events
         #------------
+
+    def getReaderList(self):
+        self.lock.acquire()
+        readerlist = []
+        for readername in self.readerDictionary.keys():
+            readerlist.append(self.readerDictionary[readername])
+        self.lock.release()
+        return readerlist
+
+        
+                
+    def hasNewEvent(self):
+        #check if there are still events that not yet be got
+        self.lock.acquire()
         if self.newEventNum > 0:
+            self.lock.release()
             return True
         else:
+            self.lock.release()
             return False
         
         
         
     def getNewEvent(self):
+        self.lock.acquire()
         self.newEventNum -= 1
         event = self.rtmEventList[0]
         del self.rtmEventList[0]
+        self.lock.release()
         return event
         
 
@@ -104,5 +129,4 @@ if __name__ == '__main__':
                  print rtmevent.getEventType()
                  print rtmevent.getEventAddData()
                  print rtmevent.getEventRemoveData()
-            time.sleep(1)
             

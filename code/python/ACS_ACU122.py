@@ -1,3 +1,6 @@
+#!usr/bin/python
+#ACS_ACU122.py
+
 import pcsc_reader
 from readerInfo import readerInfo
 #libraries for testing reason

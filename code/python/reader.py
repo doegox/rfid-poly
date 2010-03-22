@@ -1,3 +1,5 @@
+#!usr/bin/python
+#reader.py
 #abstract class of reader
 #
 #
@@ -20,6 +22,9 @@ class abstractReader:
         raise NotImplementedError,"Cannot call abstract method"
     
     def getConnectedTag(self):
+        raise NotImplementedError,"Cannot call abstract method"
+
+    def kill(self):
         raise NotImplementedError,"Cannot call abstract method"
 
 

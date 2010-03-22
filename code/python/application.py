@@ -1,3 +1,6 @@
+#!usr/bin/python
+#application.py
+
 from ReaderTagManager import readerTagManager
 from UI import userInterface
 from reader import abstractReader

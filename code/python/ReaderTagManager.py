@@ -1,3 +1,6 @@
+#!usr/bin/python
+#ReaderTagManager.py
+
 from ACS_ACU122 import ACS_ACU122
 from OMNIKEY_CARDMAN5321 import OMNIKEY_Cardman5321
 from RTMEvent import RTMevent
@@ -39,7 +42,10 @@ class readerTagManager:
         #clear pcsc reader list
         self.pcsc_readerDictionary.clear()
         #get pcsc reader list
-        r = readers()
+        try:
+           r = readers()
+        except:
+           r = []
         for reader in r:
             self.pcsc_readerDictionary[reader.name] = reader
         #get other readers using different APIs

@@ -1,3 +1,6 @@
+#!usr/bin/python
+#readerInfo.py
+
 class readerInfo:
 
     def __init__(self,currentReaderName,readerName,hardware,supportProtocols,supportTagTypes):

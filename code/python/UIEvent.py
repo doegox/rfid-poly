@@ -1,3 +1,6 @@
+#!usr/bin/python
+#UIEvent.py
+
 class UIevent:
 
     def __init__(self,cmd):

@@ -1,3 +1,6 @@
+#!usr/bin/python
+#RTMEvent.py
+
 from reader import abstractReader
 
 class RTMevent:

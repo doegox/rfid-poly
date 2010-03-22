@@ -1,4 +1,8 @@
+#!usr/bin/python
+#OMNIKEY_CARDMAN5321
+
 import pcsc_reader
+import threading,thread
 from readerInfo import readerInfo
 #libraries for testing reason
 from smartcard.System import *
@@ -11,6 +15,7 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
           pcsc_reader.PCSC_Reader.__init__(self)
           self.readerInfo = readerInfo(reader.name,self.readername,self.hardware,self.supportProtocols,self.supportTagTypes)
           self.connection = self.getConnectionToTag(reader)
+          thread.start_new_thread(self.__update,())
 
       #parameters of OMNIKEY Cardman 5321
       readername = "OMNIKEY CardMan 5x21-CL 0"
@@ -18,27 +23,55 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
       supportProtocols = ('ISO15693','ISO14443A/B')
       supportTagTypes = ('Mifare Ultralight','Mifare 1K','Mifare 4K','TagIT')
 
-      #command sets
+      #tag status
       hasAnOldTag = False
-
+      tagTouched = False
+      tagRemoved = False
+      lock = threading.Lock()
       
       
       def isTagConnected(self):
-          if not self.hasAnOldTag:
-             if self.connect(self.connection):
-                 self.hasAnOldTag = True
-             return self.hasAnOldTag
+          #self.lock.acquire()
+          if self.tagTouched:
+                #self.lock.release()
+                self.tagTouched = False
+                self.hasAnOldTag = True
+                return True
           else:
-             return False
+                #self.lock.release()
+                return False
 
       def isTagReleased(self):
-          if self.hasAnOldTag:
-              if not self.connect(self.connection):
-                  self.hasAnOldTag = False
-              return not self.hasAnOldTag
+          #self.lock.acquire()
+          if self.tagRemoved:
+                #self.lock.release()
+                self.tagRemoved = False
+                self.hasAnOldTag = False
+                return True
           else:
-              return False
+                #self.lock.release()
+                return False
 
+      def __update(self):
+          while True:
+                state = self.pollForATag()
+                #self.lock.acquire()
+                #update tagTouched,tagRemoved
+                if self.hasAnOldTag:
+                     if state:
+                            self.tagTouched = False
+                            self.tagRemoved = False
+                     else:
+                            self.tagTouched = False
+                            self.tagRemoved = True
+                else:
+                     if state:
+                            self.tagTouched = True
+                            self.tagRemoved = False
+                     else:
+                            self.tagTouched = False
+                            self.tagRemoved = False
+                #self.lock.release()
 
       def getConnectedTag(self):
           pass
@@ -46,16 +79,19 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
       def getReaderInfo(self):
           return self.readerInfo
 
+      def kill(self):
+          thread.exit()
+          del self
+
 #self-testing
 if __name__ == '__main__':
-    print "The program will exit if there is no tag action for 10secs"
+    print "The program will exit if there is no tag action for 30secs"
     time0 = time.time()
     omi = OMNIKEY_Cardman5321(readers()[1])
-    while time.time()-time0 < 10:
+    while time.time()-time0 < 30:
               if omi.isTagConnected():
-                  print "new tag connected!"
-                  time0 = time.time()
+                    print "tag connect"
               if omi.isTagReleased():
-                  print "tag released!"
-                  time0 = time.time()
+                    print "tag remove"
+    omi.kill()
           

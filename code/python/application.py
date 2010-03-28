@@ -1,36 +1,1 @@
-#!usr/bin/python
-#application.py
-
-from ReaderTagManager import readerTagManager
-from UI import userInterface
-from reader import abstractReader
-
-rtm = readerTagManager()
-ui = userInterface()
-
-userTypeExit = False
-
-while not userTypeExit:
-    if rtm.hasNewEvent():
-        rtmevent = rtm.getNewEvent()
-        if rtmevent.getEventType() == "Reader is plugin":
-            ui.printNewReaderInfo(rtmevent.getEventAddData())
-            ui.printReminder()
-        elif rtmevent.getEventType() == "Reader is removed":
-            ui.printRemovedReaderInfo(rtmevent.getEventRemoveData())
-            ui.printReminder()
-        else:
-            pass
-    if ui.hasNewEvent():
-        cmd = ui.getNewEvent().getCommand()
-        if cmd == 'help':
-            ui.printShowOptions()
-        elif cmd == 'list':
-            ui.printReaderList(rtm.getReaderList())
-        elif cmd == 'exit':
-            userTypeExit = True
-        else:
-            ui.printUnknownCommand()
-
-
-
+#!/usr/bin/python#application.pyfrom ReaderTagManager import readerTagManagerfrom UI import userInterfacefrom reader import abstractReaderfrom dataHandler import *import stringrtm = readerTagManager()ui = userInterface()readerlist = []tag = NoneuserTypeExit = Falsewhile not userTypeExit:   if rtm.hasNewEvent():       rtmevent = rtm.getNewEvent()       if rtmevent.getEventType() == "Reader is plugin":           ui.printNewReaderInfo(rtmevent.getReaderAddData())       elif rtmevent.getEventType() == "Reader is removed":           ui.printRemovedReaderInfo(rtmevent.getReaderRemoveData())       elif rtmevent.getEventType() == "Tag is attached":           ui.printNewTagInfo(rtmevent.getTagAddData())       elif rtmevent.getEventType() == "Tag is removed":           ui.printRemovedTagInfo()       else:           assert(1/0)       readerlist = rtm.getReaderList()       tag = rtm.getTag()              if ui.hasNewEvent():       ui.clearEventFlag()       cmd = ui.getNewEvent().getCommand()       if cmd == 'help':           ui.printShowOptions()       elif cmd == 'list':           ui.printDeviceList(readerlist,tag)       elif string.find(cmd,'sel ') == 0:           if len(readerlist) < findNumberInString(cmd) or findNumberInString(cmd) <= 0:              ui.printOutOfRange()           else:              ui.printSelectReaderInfo(readerlist[findNumberInString(cmd)-1])       elif cmd == 'exit':           userTypeExit = True       elif cmd == '':           pass       else:           ui.printUnknownCommand()       ui.setEventFlag()

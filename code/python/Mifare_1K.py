@@ -14,7 +14,7 @@ class Mifare_1K(abstractTag):
       supportProtocol = "ISO14443"
       supportExternalTools = ("cardselect.py","isotype.py","readmifare1k.py")
       manufacturer = "NXP"
+      isAPDUSupported = True
 
       def getTagInfo(self):
-          return tagInfo(self.tagType,self.UID,self.supportProtocol,self.supportExternalTools,self.manufacturer,self.corresponseReader)
-        
+          return tagInfo(self.tagType,self.UID,self.supportProtocol,self.supportExternalTools,self.manufacturer,self.corresponseReader,self.isAPDUSupported)

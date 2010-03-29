@@ -14,7 +14,8 @@ class Mifare_Ultralight(abstractTag):
       supportProtocol = "ISO14443"
       supportExternalTools = ("readtag.py","isotype.py","readmifareultra.py")
       manufacturer = "NXP"
+      isAPDUSupported = True
 
       def getTagInfo(self):
-          return tagInfo(self.tagType,self.UID,self.supportProtocol,self.supportExternalTools,self.manufacturer,self.corresponseReader)
+          return tagInfo(self.tagType,self.UID,self.supportProtocol,self.supportExternalTools,self.manufacturer,self.corresponseReader,self.isAPDUSupported)
         

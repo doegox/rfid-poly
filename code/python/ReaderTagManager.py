@@ -119,8 +119,14 @@ class readerTagManager:
        self.lock.release()
        return readerlist
 
+#   def getReaderInUse(self,readername):
+#       return self.readerDictionary[readername]
+
    def getTag(self):
        return self.tag
+
+   def getReaderInUse(self,readername):
+       return self.readerDictionary[readername]
 
 
 

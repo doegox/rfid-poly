@@ -64,6 +64,10 @@ class userInterface:
        print "tagType: "+tag.getTagInfo().getTagType()
        print "UID: " + tag.getTagInfo().getTagUID()
        print "Manufacturer: " + tag.getTagInfo().getManufacturerInfo()
+       if tag.getTagInfo().getIsAPDUSupported():
+          print "APDU supportable : Yes"
+       else:
+          print "APDU supportable : No"
        self.printCmdPrompt()
 
    def printRemovedTagInfo(self):
@@ -94,13 +98,27 @@ class userInterface:
 
    def printOutOfRange(self):
        print "There is no such reader connected to computer, please type list to see the details."
-       
-   def printShowOptions(self):
+
+   def printDoesntSupportAPDU(self):
+       print "Sorry, this type of tag doesn't support APDU."
+
+   def printNoReader(self):
+       print "No reader present!"
+        
+   def printShowNormalUserOptions(self):
        print "\n---------------------------------------------------------"
-       print "help----------------------------------------get help text"
+       print "help----------------------------get normal user help text"
        print "list------list out all the readers and tags in the system"
        print "sel #---------------------------------select reader num #"
+       print "apdu -------------------------------------enter apdu mode"
        print "exit-------------------------------------exit the program"
+
+   def printShowExpertUserOptions(self):
+       print "\n---------------------------------------------------------"
+       print "help----------------------------get expert user help text"
+       print "normal-----------------------back to the normal user mode"
+       print "please enter apdu as the following format(hex):          "
+       print "eg.ff ca 00 00 00(No space at the end)                   "
 
    def printDeviceList(self,readerlist,tag):
        print "\n---------------------------------------------------"
@@ -118,6 +136,16 @@ class userInterface:
                      print "     tagType: "+tag.getTagInfo().getTagType()
                      print "     UID: "+tag.getTagInfo().getTagUID()
                      print "     Manufacturer: "+ tag.getTagInfo().getManufacturerInfo()
+                     if tag.getTagInfo().getIsAPDUSupported():
+                               print "APDU supportable : Yes"
+                     else:
+                               print "APDU supportable : No"
+
+   def printReturnedAPDU(self,result):
+       data,sw1,sw2 = result
+       print "data: "
+       print data
+       print "status byte: %x %x" % (sw1,sw2)
 
    def printUnknownCommand(self):
        print "\n---------------------------------------------------------------------------------"

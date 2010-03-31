@@ -31,7 +31,8 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
      tagRemoved = False
 
      #commandSet
-     commandSet = {'getUID':[0xFF,0xCA,0x00,0x00,0x00]
+     commandSet = {'getUID':[0xFF,0xCA,0x00,0x00,0x00],
+                    'readMifareUltralight':[0xFF,0xB0,0x00]
           }
 
 
@@ -84,6 +85,23 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
 
      def getReaderInfo(self):
          return self.readerInfo
+
+     def transmitAPDU(self,apdu):
+          self.connect(self.connection)
+          return self.doTransmition(self.connection,apdu)
+
+     def readMifareUltralight(self):
+          self.connect(self.connection)
+          tagData = []
+          for i in range(16):
+               self.commandSet['readMifareUltralight'].append(i)
+               self.commandSet['readMifareUltralight'].append(16)
+               data,sw1,sw2 = self.doTransmition(self.connection,self.commandSet['readMifareUltralight'])
+               self.commandSet['readMifareUltralight'].pop()
+               self.commandSet['readMifareUltralight'].pop()
+               tagData.append(data[0:4])
+          return tagData
+               
 
      def __del__(self):
          pass

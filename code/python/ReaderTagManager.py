@@ -15,7 +15,8 @@ class readerTagManager:
 
    def __init__(self):
        thread.start_new_thread(self.__update,())
-
+       
+   r = []
    #key - pcsc reader name, map to pcsc reader instance
    pcsc_readerDictionary = {}
    #key - reader name, map to abstractReader instance
@@ -44,9 +45,9 @@ class readerTagManager:
        self.pcsc_readerDictionary.clear()
        #get pcsc reader list
        try:
-          r = readers()
+            r = readers()
        except:
-          r = []
+            pass
        for reader in r:
            self.pcsc_readerDictionary[reader.name] = reader
        #get other readers using different APIs
@@ -149,7 +150,6 @@ class readerTagManager:
        del self.rtmEventList[0]
        self.lock.release()
        return event
-
 
 
 

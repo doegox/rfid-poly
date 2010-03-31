@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #UI.py
-
+from smartcard.util import *
 from UIEvent import UIevent
 import threading
 import thread
@@ -75,6 +75,12 @@ class userInterface:
        print "EventType: Tag is removed!"
        self.printCmdPrompt()
 
+   def printModeSwitchInfo(self,flag):
+       if flag:
+          print "Warning!Switched to the expert mode."
+       else:
+          print "Warning!Switched to the normal user mode."
+
    def printSelectReaderInfo(self,reader):
        print "\n---------------------------------"
        print reader.getReaderInfo().getCurrentReaderName() + "is selected!"
@@ -104,11 +110,24 @@ class userInterface:
 
    def printNoReader(self):
        print "No reader present!"
+
+   def printNoTag(self):
+       print "No tag is available!"
+
+   def printMifareUltralight(self,data):
+       count = 0
+       for line in data:
+          print "Block %02x:    %s" % (count,toHexString(line))
+          count += 1
+
+   def printNeedToSelectReader(self):
+       print "Please select a reader!"
         
    def printShowNormalUserOptions(self):
        print "\n---------------------------------------------------------"
        print "help----------------------------get normal user help text"
        print "list------list out all the readers and tags in the system"
+       print "readtag-------------------------reads out data in the tag"
        print "sel #---------------------------------select reader num #"
        print "apdu -------------------------------------enter apdu mode"
        print "exit-------------------------------------exit the program"
@@ -137,15 +156,17 @@ class userInterface:
                      print "     UID: "+tag.getTagInfo().getTagUID()
                      print "     Manufacturer: "+ tag.getTagInfo().getManufacturerInfo()
                      if tag.getTagInfo().getIsAPDUSupported():
-                               print "APDU supportable : Yes"
+                               print "     APDU supportable : Yes"
                      else:
-                               print "APDU supportable : No"
+                               print "     APDU supportable : No"
 
-   def printReturnedAPDU(self,result):
-       data,sw1,sw2 = result
+   def printReturnedAPDU(self,data,sw1,sw2):
        print "data: "
-       print data
+       print toHexString(data)
        print "status byte: %x %x" % (sw1,sw2)
+
+   def printUnrecognizedAPDUCommand(self):
+       print "Sorry, this reader doesn't support this kind of APDU. "
 
    def printUnknownCommand(self):
        print "\n---------------------------------------------------------------------------------"

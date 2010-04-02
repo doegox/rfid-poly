@@ -163,7 +163,7 @@ class userInterface:
    def printReturnedAPDU(self,data,sw1,sw2):
        print "data: "
        print toHexString(data)
-       print "status byte: %x %x" % (sw1,sw2)
+       print "status byte: %02x %02x" % (sw1,sw2)
 
    def printUnrecognizedAPDUCommand(self):
        print "Sorry, this reader doesn't support this kind of APDU. "

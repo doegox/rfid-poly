@@ -51,16 +51,14 @@ class readerTagManager:
 
        #--------------------------------------
        for key in self.pcsc_readerDictionary.keys():
-            if not key in self.readerDictionary.keys():
+            if not key in self.readerDictionary.keys():    
                 if string.find(key,'    CCID USB Reader') == 0:
-                   acs = ACS_ACU122(self.pcsc_readerDictionary[key])
-                   self.addInDictionary[key] = acs
+                   new_reader = ACS_ACU122(self.pcsc_readerDictionary[key])
                 elif string.find(key,'OMNIKEY CardMan 5x21-CL') == 0:
-                   omi = OMNIKEY_Cardman5321(self.pcsc_readerDictionary[key])
-                   self.addInDictionary[key] = omi
+                   new_reader = OMNIKEY_Cardman5321(self.pcsc_readerDictionary[key])
                 else:
-                   unknown_pcsc_reader = PCSC_Reader(self.pcsc_readerDictionary[key])
-                   self.addInDictionary[key] = unknown_pcsc_reader
+                   new_reader = PCSC_Reader(self.pcsc_readerDictionary[key])
+                self.addInDictionary[key] = new_reader
 
        for key in self.readerDictionary.keys():
             if not key in self.pcsc_readerDictionary.keys():

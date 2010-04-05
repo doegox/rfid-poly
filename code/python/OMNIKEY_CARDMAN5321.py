@@ -18,6 +18,7 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
          self.reader = reader
          self.readerInfo = readerInfo(reader.name,self.readername,self.hardware,self.supportProtocols,self.supportTagTypes)
          self.connection = self.getConnectionToTag(reader)
+         self.protocol = smartcard.scard.SCARD_PROTOCOL_T1
 
      #parameters of OMNIKEY Cardman 5321
      readername = "OMNIKEY CardMan 5x21-CL 0"
@@ -73,7 +74,7 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
      def getConnectedTag(self):
          self.connect(self.connection)
          atr = self.connection.getATR()
-         tagUID,sw1,sw2 = self.doTransmition(self.connection,self.commandSet["getUID"])
+         tagUID,sw1,sw2 = self.doTransmition(self.connection,self.commandSet["getUID"],self.protocol)
          atr_len = len(atr) 
 
          if atr_len > 14:
@@ -94,7 +95,7 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
 
      def transmitAPDU(self,apdu):
           self.connect(self.connection)
-          return self.doTransmition(self.connection,apdu)
+          return self.doTransmition(self.connection,apdu,self.protocol)
 
      def readMifareUltralight(self):
           self.connect(self.connection)
@@ -102,7 +103,7 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
           for i in range(16):
                self.commandSet['readMifareUltralight'].append(i)
                self.commandSet['readMifareUltralight'].append(16)
-               data,sw1,sw2 = self.doTransmition(self.connection,self.commandSet['readMifareUltralight'])
+               data,sw1,sw2 = self.doTransmition(self.connection,self.commandSet['readMifareUltralight'],self.protocol)
                self.commandSet['readMifareUltralight'].pop()
                self.commandSet['readMifareUltralight'].pop()
                tagData.append(data[0:4])

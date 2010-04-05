@@ -50,8 +50,7 @@ class userInterface:
        self.printCmdPrompt()
 
    def printNewTagInfo(self,tag):
-       print "EventType: New tag is found!"
-       print "Software detected the following tags are new added:"
+       print "New tag found:"
        if tag != None: 
            print "tagType: "+tag.getTagInfo().getTagType()
            print "UID: " + tag.getTagInfo().getTagUID()
@@ -64,7 +63,7 @@ class userInterface:
        self.printCmdPrompt()
 
    def printRemovedTagInfo(self):
-       print "EventType: Tag is removed!"
+       print "Tag is removed!"
        self.printCmdPrompt()
 
    def printModeSwitchInfo(self,flag):
@@ -167,7 +166,7 @@ class userInterface:
        print "The command is unknown, please re-input and if any doubt please type help command"
 
    def printCmdPrompt(self):
-         print "Please type in command:"
+         print "Please type in command:",
 
    def clearEventFlag(self):
          self.eventFromUI.clear()

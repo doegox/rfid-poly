@@ -74,14 +74,20 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
          self.connect(self.connection)
          atr = self.connection.getATR()
          tagUID,sw1,sw2 = self.doTransmition(self.connection,self.commandSet["getUID"])
-         if hex(atr[14]) == '0x1':
-              return Mifare_1K(toHexString(tagUID),self.reader.name)
-         elif hex(atr[14]) == '0x2':
-              return Mifare_4K(toHexString(tagUID),self.reader.name)
-         elif hex(atr[14]) == '0x3':
-              return Mifare_Ultralight(toHexString(tagUID),self.reader.name)
+         atr_len = len(atr) 
+
+         if atr_len > 14:
+              if hex(atr[14]) == '0x1':
+                  return Mifare_1K(toHexString(tagUID),self.reader.name)
+              elif hex(atr[14]) == '0x2':
+                  return Mifare_4K(toHexString(tagUID),self.reader.name)
+              elif hex(atr[14]) == '0x3':
+                  return Mifare_Ultralight(toHexString(tagUID),self.reader.name)
+              else:
+                  print 'unsupported tag format(no Mifare 1k/4k/UL)'
+                 #assert(False)
          else:
-              assert(1/0)
+               print 'atr length not > 14. unknown tag'
 
      def getReaderInfo(self):
          return self.readerInfo

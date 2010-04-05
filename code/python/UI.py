@@ -41,37 +41,29 @@ class userInterface:
        self.newEventNum -= 1
        return uievent
 
-   def printNewReaderInfo(self,readerlist):
-       print "\n-----------new events------------"
-       print "EventType: New readers are plugin"
-       print "Software detected the following readers are new added:"
-       for reader in readerlist:
-           print reader.getReaderInfo().getCurrentReaderName()
+   def printNewReaderInfo(self,reader):
+       print "Reader detected:", reader.getReaderInfo().getCurrentReaderName()
        self.printCmdPrompt()
 
-   def printRemovedReaderInfo(self,readerlist):
-       print "\n-----------new events------------"
-       print "EventType: Some readers are removed"
-       print "Software detected the following readers are removed:"
-       for reader in readerlist:
-           print reader
+   def printRemovedReaderInfo(self,reader):
+       print "Reader removed:", reader
        self.printCmdPrompt()
 
    def printNewTagInfo(self,tag):
-       print "\n-----------new events------------"
        print "EventType: New tag is found!"
        print "Software detected the following tags are new added:"
-       print "tagType: "+tag.getTagInfo().getTagType()
-       print "UID: " + tag.getTagInfo().getTagUID()
-       print "Manufacturer: " + tag.getTagInfo().getManufacturerInfo()
-       if tag.getTagInfo().getIsAPDUSupported():
-          print "APDU supportable : Yes"
-       else:
-          print "APDU supportable : No"
+       if tag != None: 
+           print "tagType: "+tag.getTagInfo().getTagType()
+           print "UID: " + tag.getTagInfo().getTagUID()
+           print "Manufacturer: " + tag.getTagInfo().getManufacturerInfo()
+           if tag.getTagInfo().getIsAPDUSupported():
+              print "APDU supportable : Yes"
+           else:
+              print "APDU supportable : No"
+       else: print 'error: None-tag in UI.'
        self.printCmdPrompt()
 
    def printRemovedTagInfo(self):
-       print "\n-----------new events------------"
        print "EventType: Tag is removed!"
        self.printCmdPrompt()
 
@@ -159,6 +151,8 @@ class userInterface:
                                print "     APDU supportable : Yes"
                      else:
                                print "     APDU supportable : No"
+               else: print 'error: none-tag in UI.py'
+                  
 
    def printReturnedAPDU(self,data,sw1,sw2):
        print "data: "

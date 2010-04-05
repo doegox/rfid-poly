@@ -4,7 +4,7 @@
 from ACS_ACU122 import ACS_ACU122
 from OMNIKEY_CARDMAN5321 import OMNIKEY_Cardman5321
 from pcsc_reader import PCSC_Reader
-from RTMEvent import RTMevent
+from RTMEvent import *
 from smartcard.System import *
 from smartcard.util import *
 import string
@@ -22,11 +22,8 @@ class readerTagManager:
    #key - reader name, map to abstractReader instance
    readerDictionary = {}
    addInDictionary = {}
-   #move out list
    moveOutList = []
-   #tag
    tag = None
-   #event list
    rtmEventList = []
    newEventNum = 0
    lock = threading.Lock()
@@ -47,7 +44,7 @@ class readerTagManager:
        try:
             r = readers()
        except:
-            pass
+            print 'error. not sure what to do ... '
        for reader in r:
            self.pcsc_readerDictionary[reader.name] = reader
        #get other readers using different APIs
@@ -79,20 +76,16 @@ class readerTagManager:
       
    def __updateEventList(self):
        if len(self.addInDictionary.keys()) > 0:
-           self.newEventNum += 1
            #make a local list of the global variable addInList
-           addInList = []
            for key in self.addInDictionary.keys():
-               addInList.append(self.addInDictionary[key])
-           self.rtmEventList.append(RTMevent("Reader is plugin",addInList,[],[],[]))
+               self.newEventNum += 1
+               self.rtmEventList.append(RTMevent(RTMET_READER_DETECTED,self.addInDictionary[key]))
            self.addInDictionary.clear()
        if len(self.moveOutList) > 0:
-           self.newEventNum += 1
            #make a local copy of the global variable moveOutList
-           moveOutList = []
            for reader in self.moveOutList:
-               moveOutList.append(reader)
-           self.rtmEventList.append(RTMevent("Reader is removed",[],moveOutList,[],[]))
+               self.rtmEventList.append(RTMevent(RTMET_READER_REMOVED,reader))
+               self.newEventNum += 1
            del self.moveOutList[:]
        #update Reader status
        for key in self.readerDictionary.keys():
@@ -103,11 +96,11 @@ class readerTagManager:
           self.readerDictionary[key].update()
           if self.readerDictionary[key].isTagConnected():
              self.tag = self.readerDictionary[key].getConnectedTag()
-             self.rtmEventList.append(RTMevent("Tag is attached",[],[],self.tag,[]))
+             self.rtmEventList.append(RTMevent(RTMET_TAG_DETECTED,self.tag))
              self.newEventNum += 1
           if self.readerDictionary[key].isTagReleased():
              self.tag = None
-             self.rtmEventList.append(RTMevent("Tag is removed",[],[],[],[]))
+             self.rtmEventList.append(RTMevent(RTMET_TAG_REMOVED,None))
              self.newEventNum += 1
        #other events
        #------------
@@ -153,7 +146,7 @@ class readerTagManager:
 
 
 
-#self-testing
+#self-testing : what does it do??
 if __name__ == '__main__':
        rtm = readerTagManager()
        while True:

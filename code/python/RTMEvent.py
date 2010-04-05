@@ -3,26 +3,36 @@
 
 from reader import abstractReader
 
+#allowed event types: 
+LST_EVENT_TYPES = (
+RTMET_READER_DETECTED, #data=reader instance
+RTMET_READER_REMOVED, #data=reader string
+RTMET_TAG_DETECTED, #data=tbd
+RTMET_TAG_REMOVED #data=None
+) = range(4)
+
 class RTMevent:
+    def __init__(self, eventType, eventData):
+       assert( eventType in LST_EVENT_TYPES )
+       self.__eventType = eventType        
+       self.__eventData = eventData
 
-   def __init__(self,eventType,readerAddData,readerRemoveData,tagAddData,tagRemoveData):
-       self.eventType = eventType
-       self.readerAddData = readerAddData
-       self.readerRemoveData = readerRemoveData
-       self.tagAddData = tagAddData
-       self.tagRemoveData = tagRemoveData
+    def getEventType(self):
+       return self.__eventType
 
-   def getEventType(self):
-       return self.eventType
+    def getReaderAddData(self):
+       assert( isinstance( self.__eventData, abstractReader) )
+       return self.__eventData
 
-   def getReaderAddData(self):
-       return self.readerAddData
+    def getReaderRemoveData(self):
+       assert ( type(self.__eventData) == str )
+       return self.__eventData 
 
-   def getReaderRemoveData(self):
-       return self.readerRemoveData
+    def getTagAddData(self):
+       return self.__eventData
 
-   def getTagAddData(self):
-       return self.tagAddData
+    def getTagRemoveData(self):
+       assert ( type(self.eventData) == type(None) )
+       return self.__eventData
 
-   def getTagRemoveData(self):
-       return self.tagRemoveData
+

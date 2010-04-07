@@ -3,13 +3,16 @@
 
 from reader import abstractReader
 
+
+#-------------------------------------------------------------------------------
 #allowed event types: 
 LST_EVENT_TYPES = (
 RTMET_READER_DETECTED, #data=reader instance
 RTMET_READER_REMOVED, #data=reader string
-RTMET_TAG_DETECTED, #data=tbd
+RTMET_TAG_DETECTED, #data=tag instance
 RTMET_TAG_REMOVED #data=None
 ) = range(4)
+
 
 class RTMevent:
     def __init__(self, eventType, eventData):

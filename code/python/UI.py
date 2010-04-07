@@ -2,6 +2,7 @@
 #UI.py
 from smartcard.util import *
 from UIEvent import UIevent
+from database import *
 import threading
 import thread
 import time

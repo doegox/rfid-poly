@@ -8,6 +8,7 @@ from RTMEvent import *
 from smartcard.System import *
 from smartcard.util import *
 import string
+import os
 import threading,thread
 import time
 
@@ -52,9 +53,9 @@ class readerTagManager:
        #--------------------------------------
        for key in self.pcsc_readerDictionary.keys():
             if not key in self.readerDictionary.keys():    
-                if string.find(key,'    CCID USB Reader') == 0:
+                if ACS_ACU122.isThisType(os.name,key):
                    new_reader = ACS_ACU122(self.pcsc_readerDictionary[key])
-                elif string.find(key,'OMNIKEY CardMan 5x21-CL') == 0:
+                elif OMNIKEY_Cardman5321.isThisType(os.name,key):
                    new_reader = OMNIKEY_Cardman5321(self.pcsc_readerDictionary[key])
                 else:
                    new_reader = PCSC_Reader(self.pcsc_readerDictionary[key])
@@ -89,8 +90,8 @@ class readerTagManager:
        for key in self.readerDictionary.keys():
           #if the reader is recognized by the API but not for our application
           #skip that reader and check the next one
-          if self.readerDictionary[key].__class__ == PCSC_Reader:
-             continue
+          #if self.readerDictionary[key].__class__ == PCSC_Reader:
+          #   continue
           self.readerDictionary[key].update()
           if self.readerDictionary[key].isTagConnected():
              self.tag = self.readerDictionary[key].getConnectedTag()

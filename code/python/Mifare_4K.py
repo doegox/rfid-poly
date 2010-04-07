@@ -2,6 +2,7 @@
 #Mifare_Ultralight.py
 from tag import abstractTag
 from tagInfo import tagInfo
+from database import *
 
 class Mifare_4K(abstractTag):
 
@@ -10,9 +11,9 @@ class Mifare_4K(abstractTag):
           self.UID = UID
           self.corresponseReader = corresponseReader
 
-      tagType = "Mifare Classic 4K"
-      supportProtocol = "ISO14443"
-      supportExternalTools = ("cardselect.py","isotype.py","readmifaresimple.py")
+      tagType = MIFARE_4K
+      supportProtocol = ISO14443
+      supportExternalTools = (CARDSELECT,ISOTYPE,READMIFARESIMPLE)
       manufacturer = "NXP"
       isAPDUSupported = True
 

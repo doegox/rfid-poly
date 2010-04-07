@@ -2,6 +2,7 @@
 #UnknownTag.py
 from tag import abstractTag
 from tagInfo import tagInfo
+from database import *
 
 class UnknownTag(abstractTag):
 
@@ -10,10 +11,10 @@ class UnknownTag(abstractTag):
           self.UID = UID
           self.corresponseReader = corresponseReader
 
-      tagType = "Unknown"
-      supportProtocol = "Unknown"
-      supportExternalTools = ("")
-      manufacturer = "Unknown"
+      tagType = UNKNOWN
+      supportProtocol = UNKNOWN
+      supportExternalTools = ()
+      manufacturer = 'Unknown'
       isAPDUSupported = False
 
       def getTagInfo(self):

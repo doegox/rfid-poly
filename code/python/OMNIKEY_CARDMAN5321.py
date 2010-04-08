@@ -42,16 +42,16 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
          atr_len = len(atr) 
          if atr_len > 14:
               if hex(atr[14]) == NN[MIFARE_1K]:
-                  return Mifare_1K(toHexString(tagUID),self.reader.name)
+                  return Mifare_1K(toHexString(tagUID),self.getATR(),self.reader.name)
               elif hex(atr[14]) == NN[MIFARE_4K]:
-                  return Mifare_4K(toHexString(tagUID),self.reader.name)
+                  return Mifare_4K(toHexString(tagUID),self.getATR(),self.reader.name)
               elif hex(atr[14]) == NN[MIFARE_ULTRALIGHT]:
-                  return Mifare_Ultralight(toHexString(tagUID),self.reader.name)
+                  return Mifare_Ultralight(toHexString(tagUID),self.getATR(),self.reader.name)
               else:
                   print 'unsupported tag format(no Mifare 1k/4k/UL)'
-                  return ( UnknownTag(toHexString(tagUID),self.reader.name) )
+                  return ( UnknownTag(toHexString(tagUID),self.getATR(),self.reader.name) )
          else:
-              return ( UnknownTag(toHexString(tagUID),self.reader.name) ) 
+              return ( UnknownTag(toHexString(tagUID),self.getATR(),self.reader.name) ) 
 
      def getReaderInfo(self):
          return self.readerInfo
@@ -75,7 +75,7 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
      @staticmethod
      def isThisType(sysName,readerName):
           if sysName == 'posix':
-               if readerName[-2:] == '01' and string.find(readerName,'OMINKEY CardMan 5x21') == 0:
+               if readerName[-2:] == '01' and string.find(readerName,'OMNIKEY CardMan 5x21') == 0:
                   return True
                else:
                   return False

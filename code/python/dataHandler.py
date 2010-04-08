@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #dataHandler.py
 import string
+from database import *
 
 def findNumberInString(cmd):
     return int(cmd[4])
@@ -15,3 +16,10 @@ def stringToArray(cmd):
        return apdu
     except:
        return None
+
+def findTagsNotInEnum(tagList):
+    NotInEnum = []
+    for tagtype in tagTypes:
+        if tagtype != UNKNOWN and not tagtype in tagList:
+            NotInEnum.append(tagtype)
+    return NotInEnum

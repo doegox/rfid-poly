@@ -55,6 +55,7 @@ class userInterface:
        if tag != None: 
            print "tagType: "+tag.getTagInfo().getTagType()
            print "UID: " + tag.getTagInfo().getTagUID()
+           print "ATR: " + tag.getTagInfo().getATR()
            print "Manufacturer: " + tag.getTagInfo().getManufacturerInfo()
            if tag.getTagInfo().getIsAPDUSupported():
               print "APDU supportable : Yes"
@@ -119,6 +120,7 @@ class userInterface:
        print "\n---------------------------------------------------------"
        print "help----------------------------get normal user help text"
        print "list------list out all the readers and tags in the system"
+       print "tag?-----------find out possible readers can read the tag"
        print "readtag-------------------------reads out data in the tag"
        print "sel #---------------------------------select reader num #"
        print "apdu -------------------------------------enter apdu mode"
@@ -146,18 +148,34 @@ class userInterface:
                      print "     with tag:"
                      print "     tagType: "+tag.getTagInfo().getTagType()
                      print "     UID: "+tag.getTagInfo().getTagUID()
+                     print "     ATR: "+tag.getTagInfo().getATR()
                      print "     Manufacturer: "+ tag.getTagInfo().getManufacturerInfo()
                      if tag.getTagInfo().getIsAPDUSupported():
                                print "     APDU supportable : Yes"
                      else:
                                print "     APDU supportable : No"
                else: print 'error: none-tag in UI.py'
-                  
 
-   def printReturnedAPDU(self,data,sw1,sw2):
+   def printRTMEventDashLine(self):
+       print "\n--------------------------------------------------------------------------------"
+                  
+   @staticmethod
+   def printReturnedAPDU(data,sw1,sw2):
        print "data: "
        print toHexString(data)
        print "status byte: %02x %02x" % (sw1,sw2)
+
+   @staticmethod
+   def printATR(atr):
+       print "ATR " + atr
+
+   def printSolutionForUnknownTag(self,taglist):
+       if len(taglist) == 0:
+          print "Sorry, our software doesn't support reading of the tag with this type\n"
+       else:
+          print "The tag connected might be the following types:"
+          for tag in taglist:
+             print "%s " % tag
 
    def printUnrecognizedAPDUCommand(self):
        print "Sorry, this reader doesn't support this kind of APDU. "
@@ -168,6 +186,9 @@ class userInterface:
 
    def printCmdPrompt(self):
          print "Please type in command:",
+
+   def printTagIsRecognized(self,tag,reader):
+         print "The tag type is %s and it is connected to reader %s" % (tag,reader)
 
    def clearEventFlag(self):
          self.eventFromUI.clear()

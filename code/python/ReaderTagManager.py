@@ -7,6 +7,7 @@ from pcsc_reader import PCSC_Reader
 from RTMEvent import *
 from smartcard.System import *
 from smartcard.util import *
+from ui import userInterface
 import string
 import os
 import threading,thread

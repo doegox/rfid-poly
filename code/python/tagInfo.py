@@ -3,9 +3,10 @@
 
 class tagInfo:
 
-    def __init__(self,tagType,UID,supportProtocol,supportExternalTools,manufacturer,corresponseReader,isAPDUSupported):
+    def __init__(self,tagType,UID,ATR,supportProtocol,supportExternalTools,manufacturer,corresponseReader,isAPDUSupported):
         self.tagType = tagType
         self.UID = UID
+        self.ATR = ATR
         self.supportProtocol = supportProtocol
         self.supportExternalTools = supportExternalTools
         self.manufacturer = manufacturer
@@ -18,6 +19,9 @@ class tagInfo:
     def getTagUID(self):
         return self.UID
 
+    def getATR(self):
+        return self.ATR
+    
     def getSupportProtocol(self):
         return self.supportProtocol
 

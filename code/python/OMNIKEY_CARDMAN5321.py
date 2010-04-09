@@ -27,7 +27,7 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
      readername = OMNIKEY_CARDMAN_5321
      hardware = PN531
      supportProtocols = (ISO15693,ISO14443)
-     supportTagTypes = (MIFARE_ULTRALIGHT,MIFARE_1K,MIFARE_4K,TAGIT)
+     supportTagTypes = (MIFARE_ULTRALIGHT,MIFARE_1K,MIFARE_4K,TAGIT,MIFARE_DESFIRE)
 
 
      #commandSet
@@ -58,6 +58,7 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
 
      def transmitAPDU(self,apdu):
           self.connect(self.connection)
+          print apdu
           return self.doTransmition(self.connection,apdu,self.protocol)
 
      def readMifareUltralight(self):

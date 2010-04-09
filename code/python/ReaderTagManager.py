@@ -45,8 +45,11 @@ class readerTagManager:
        #get pcsc reader list
        try:
             r = readers()
+       except NameError:
+            #for debian linux, try to get reader list without any reader connected will give this exception.
+            r = []
        except:
-            print 'error. not sure what to do ... '
+            assert(False)
        for reader in r:
            self.pcsc_readerDictionary[reader.name] = reader
        #get other readers using different APIs

@@ -14,8 +14,11 @@ def stringToArray(cmd):
              apdu.append(int(cmd[index:index+2],16))
              index += 3
        return apdu
-    except:
+    except ValueError:
+       #incorrect format of apdu may cause this type of exception
        return None
+    except:
+       assert(False)
 
 def findTagsNotInEnum(tagList):
     NotInEnum = []

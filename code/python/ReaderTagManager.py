@@ -3,11 +3,13 @@
 
 from ACS_ACU122 import ACS_ACU122
 from OMNIKEY_CARDMAN5321 import OMNIKEY_Cardman5321
+from arygon import ARYGON
 from pcsc_reader import PCSC_Reader
 from RTMEvent import *
 from smartcard.System import *
 from smartcard.util import *
 from ui import userInterface
+from debugging import Debug
 import string
 import os
 import threading,thread
@@ -61,6 +63,8 @@ class readerTagManager:
                    new_reader = ACS_ACU122(self.pcsc_readerDictionary[key])
                 elif OMNIKEY_Cardman5321.isThisType(os.name,key):
                    new_reader = OMNIKEY_Cardman5321(self.pcsc_readerDictionary[key])
+                elif ARYGON.isThisType(os.name,key):
+                   new_reader = ARYGON(self.pcsc_readerDictionary[key])
                 else:
                    new_reader = PCSC_Reader(self.pcsc_readerDictionary[key])
                 self.addInDictionary[key] = new_reader

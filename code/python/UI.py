@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#UI.py
+#ui.py
 from smartcard.util import *
 from UIEvent import UIevent
 from database import *
@@ -43,14 +43,19 @@ class userInterface:
        return uievent
 
    def printNewReaderInfo(self,reader):
-       print "Reader detected:", reader.getReaderInfo().getCurrentReaderName()
+       self.printRTMEventDashLine()
+       print "Reader detected:", reader.getReaderInfo().getCurrentReaderName(),
+       self.printRTMEventDashLine()
        self.printCmdPrompt()
 
    def printRemovedReaderInfo(self,reader):
+       self.printRTMEventDashLine()
        print "Reader removed:", reader
+       self.printRTMEventDashLine()
        self.printCmdPrompt()
 
    def printNewTagInfo(self,tag):
+       self.printRTMEventDashLine()
        print "New tag found:"
        if tag != None: 
            print "tagType: "+tag.getTagInfo().getTagType()
@@ -58,15 +63,19 @@ class userInterface:
            print "ATR: " + tag.getTagInfo().getATR()
            print "Manufacturer: " + tag.getTagInfo().getManufacturerInfo()
            if tag.getTagInfo().getIsAPDUSupported():
-              print "APDU supportable : Yes"
+              print "APDU supportable : Yes",
            else:
-              print "APDU supportable : No"
+              print "APDU supportable : No",
        else: print 'error: None-tag in UI.'
+       self.printRTMEventDashLine()
        self.printCmdPrompt()
 
    def printRemovedTagInfo(self):
-       print "Tag is removed!"
+       self.printRTMEventDashLine()
+       print "Tag is removed!",
+       self.printRTMEventDashLine()
        self.printCmdPrompt()
+       
 
    def printModeSwitchInfo(self,flag):
        if flag:
@@ -95,6 +104,15 @@ class userInterface:
            print "Unknown"
        print "\n"
 
+   def printTagExternalTools(self,tagName,toolList):
+       if len(toolList) == 0:
+           print "Haven't found any tool can be used for tag %s" % tagName
+       else:   
+           print "The following external tools may be available For tag %s:" % tagName 
+           for tool in toolList:
+               print "%s " % tool,
+           print ''
+      
    def printOutOfRange(self):
        print "There is no such reader connected to computer, please type list to see the details."
 
@@ -108,6 +126,7 @@ class userInterface:
        print "No tag is available!"
 
    def printMifareUltralight(self,data):
+       print ''
        count = 0
        for line in data:
           print "Block %02x:    %s" % (count,toHexString(line))
@@ -122,6 +141,7 @@ class userInterface:
        print "list------list out all the readers and tags in the system"
        print "tag?-----------find out possible readers can read the tag"
        print "readtag-------------------------reads out data in the tag"
+       print "tool----------------show available external tools for tag"
        print "sel #---------------------------------select reader num #"
        print "apdu -------------------------------------enter apdu mode"
        print "exit-------------------------------------exit the program"
@@ -157,7 +177,7 @@ class userInterface:
                else: print 'error: none-tag in UI.py'
 
    def printRTMEventDashLine(self):
-       print "\n--------------------------------------------------------------------------------"
+       print "\n*************************************************************"
                   
    @staticmethod
    def printReturnedAPDU(data,sw1,sw2):
@@ -165,9 +185,6 @@ class userInterface:
        print toHexString(data)
        print "status byte: %02x %02x" % (sw1,sw2)
 
-   @staticmethod
-   def printATR(atr):
-       print "ATR " + atr
 
    def printSolutionForUnknownTag(self,taglist):
        if len(taglist) == 0:
@@ -176,6 +193,9 @@ class userInterface:
           print "The tag connected might be the following types:"
           for tag in taglist:
              print "%s " % tag
+
+   def printUnImplementedTag(self,readername):
+       print "The tag is recognized by %s but we haven't implement the tag for this reader, sorry for that." % readername
 
    def printUnrecognizedAPDUCommand(self):
        print "Sorry, this reader doesn't support this kind of APDU. "

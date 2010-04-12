@@ -9,6 +9,7 @@ from Mifare_Ultralight import Mifare_Ultralight
 from Mifare_1K import Mifare_1K
 from Mifare_4K import Mifare_4K
 from UnknownTag import UnknownTag
+from debugging import Debug
 #libraries for testing reason
 from smartcard.System import *
 from smartcard.util import *
@@ -48,7 +49,6 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
               elif hex(atr[14]) == NN[MIFARE_ULTRALIGHT]:
                   return Mifare_Ultralight(toHexString(tagUID),self.getATR(),self.reader.name)
               else:
-                  print 'unsupported tag format(no Mifare 1k/4k/UL)'
                   return ( UnknownTag(toHexString(tagUID),self.getATR(),self.reader.name) )
          else:
               return ( UnknownTag(toHexString(tagUID),self.getATR(),self.reader.name) ) 
@@ -58,7 +58,6 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
 
      def transmitAPDU(self,apdu):
           self.connect(self.connection)
-          print apdu
           return self.doTransmition(self.connection,apdu,self.protocol)
 
      def readMifareUltralight(self):

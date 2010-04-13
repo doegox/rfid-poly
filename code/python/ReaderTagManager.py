@@ -8,7 +8,6 @@ from pcsc_reader import PCSC_Reader
 from RTMEvent import *
 from smartcard.System import *
 from smartcard.util import *
-from ui import userInterface
 from debugging import Debug
 import string
 import os
@@ -17,8 +16,14 @@ import time
 
 class readerTagManager:
 
-   def __init__(self):
+   def __init__(self,debug):
+       global DEBUG
+       DEBUG = debug
        thread.start_new_thread(self.__update,())
+       #-------------------------------------------------------
+       if DEBUG:
+           Debug.printReadableInfo('RTM',': thread starts...')
+       #-------------------------------------------------------
        
    r = []
    #key - pcsc reader name, map to pcsc reader instance
@@ -50,7 +55,14 @@ class readerTagManager:
        except NameError:
             #for debian linux, try to get reader list without any reader connected will give this exception.
             r = []
+            #-----------------------------------------------------------------------------------------------
+            if DEBUG:
+               Debug.printReadableInfo('ExceptionFromReaderTagManager',': The reason might be try to get the pcsc reader list on Unix/Linux machine.')
+            #-----------------------------------------------------------------------------------------------
        except:
+            #-----------------------------------------------------------------------------------------------
+            if DEBUG:
+               Debug.printReadableInfo('ExceptionFromReaderTagManager',": Doesn't know any reason leads to this problem, program stopped.")
             assert(False)
        for reader in r:
            self.pcsc_readerDictionary[reader.name] = reader
@@ -60,13 +72,13 @@ class readerTagManager:
        for key in self.pcsc_readerDictionary.keys():
             if not key in self.readerDictionary.keys():    
                 if ACS_ACU122.isThisType(os.name,key):
-                   new_reader = ACS_ACU122(self.pcsc_readerDictionary[key])
+                   new_reader = ACS_ACU122(self.pcsc_readerDictionary[key],DEBUG)
                 elif OMNIKEY_Cardman5321.isThisType(os.name,key):
-                   new_reader = OMNIKEY_Cardman5321(self.pcsc_readerDictionary[key])
+                   new_reader = OMNIKEY_Cardman5321(self.pcsc_readerDictionary[key],DEBUG)
                 elif ARYGON.isThisType(os.name,key):
-                   new_reader = ARYGON(self.pcsc_readerDictionary[key])
+                   new_reader = ARYGON(self.pcsc_readerDictionary[key],DEBUG)
                 else:
-                   new_reader = PCSC_Reader(self.pcsc_readerDictionary[key])
+                   new_reader = PCSC_Reader(self.pcsc_readerDictionary[key],DEBUG)
                 self.addInDictionary[key] = new_reader
 
        for key in self.readerDictionary.keys():

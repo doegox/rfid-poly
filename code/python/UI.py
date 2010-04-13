@@ -1,17 +1,31 @@
 #!/usr/bin/python
 #ui.py
 from smartcard.util import *
+from debugging import Debug
 from UIEvent import UIevent
 from database import *
 import threading
 import thread
 import time
+try:
+   from WConio import *
+except:
+   pass
 
 class userInterface:
 
-   def __init__(self):
+   def __init__(self,debug):
+       global DEBUG
+       DEBUG = debug
        self.eventFromUI.set()
+       #----------------------------------------------
+       if DEBUG:
+          self.eventFromUI.clear()
+          self.printDebugModeWarning()
+          self.eventFromUI.set()
+       #----------------------------------------------
        thread.start_new_thread(self.__checkNewEvent,())
+          
 
    newEventNum = 0
    newEventList = []
@@ -19,12 +33,17 @@ class userInterface:
    eventFromUI = threading.Event()
 
    def __checkNewEvent(self):
+       if DEBUG:
+           try:
+               textcolor(BLACK)
+           except:
+               pass       
        while True:
            if self.newEventNum == 0:
                           self.eventFromUI.wait()
                           if not self.programExit:
                               self.printCmdPrompt()
-                              cmd = str(raw_input(""))
+                              cmd = str(raw_input("\n"))
                               self.newEventList.append(UIevent(cmd))
                               self.newEventNum += 1
                               if cmd == 'exit':
@@ -75,6 +94,9 @@ class userInterface:
        print "Tag is removed!",
        self.printRTMEventDashLine()
        self.printCmdPrompt()
+
+   def printDebugModeWarning(self):
+       print "Dear users, you are now using the debug mode. You can just distinguish the debug info and normal info from colors.(debug = RED, normal = BLACK)" 
        
 
    def printModeSwitchInfo(self,flag):
@@ -178,12 +200,10 @@ class userInterface:
 
    def printRTMEventDashLine(self):
        print "\n*************************************************************"
-                  
-   @staticmethod
-   def printReturnedAPDU(data,sw1,sw2):
-       print "data: "
-       print toHexString(data)
-       print "status byte: %02x %02x" % (sw1,sw2)
+
+   def printReturnedAPDU(self,result,sw1,sw2):
+       print "data: %s" % result
+       print "errcode: %02x %02x" % (sw1,sw2)
 
 
    def printSolutionForUnknownTag(self,taglist):

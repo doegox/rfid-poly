@@ -33,17 +33,16 @@ class userInterface:
    eventFromUI = threading.Event()
 
    def __checkNewEvent(self):
+       #-----------------------------------------------------
        if DEBUG:
-           try:
-               textcolor(BLACK)
-           except:
-               pass       
+           Debug.printReadableInfo('UI',': thread starts...')
+       #-----------------------------------------------------
        while True:
            if self.newEventNum == 0:
                           self.eventFromUI.wait()
                           if not self.programExit:
                               self.printCmdPrompt()
-                              cmd = str(raw_input("\n"))
+                              cmd = str(raw_input(""))
                               self.newEventList.append(UIevent(cmd))
                               self.newEventNum += 1
                               if cmd == 'exit':
@@ -51,11 +50,19 @@ class userInterface:
 
    def hasNewEvent(self):
        if self.newEventNum > 0:
+           #------------------------------------------------------------
+           if DEBUG:
+              Debug.printReadableInfo("UI",": has a new event!")
+           #------------------------------------------------------------
            return True
        else:
            return False
 
    def getNewEvent(self):
+       #----------------------------------------------------------------
+       if DEBUG:
+          Debug.printReadableInfo("UI",": the event is acked by application.")
+       #----------------------------------------------------------------
        uievent = self.newEventList[0]
        del self.newEventList[0]
        self.newEventNum -= 1
@@ -169,11 +176,11 @@ class userInterface:
        print "exit-------------------------------------exit the program"
 
    def printShowExpertUserOptions(self):
-       print "\n---------------------------------------------------------"
-       print "help----------------------------get expert user help text"
-       print "normal-----------------------back to the normal user mode"
+       print "\n--------------------=======-------------------------------------"
+       print "help------------------------------------get expert user help text"
+       print "normal-------------------------------back to the normal user mode"
        print "please enter apdu as the following format(hex):          "
-       print "eg.ff ca 00 00 00(No space at the end)                   "
+       print "eg.ff ca 00 00 00(The separator can either be a ',',':' or space)"
 
    def printDeviceList(self,readerlist,tag):
        print "\n---------------------------------------------------"
@@ -203,7 +210,10 @@ class userInterface:
 
    def printReturnedAPDU(self,result,sw1,sw2):
        print "data: %s" % result
-       print "errcode: %02x %02x" % (sw1,sw2)
+       if sw1 == 0xff and sw2 == 0xff:
+          print "errcode: 0xXX 0xXX"
+       else:
+          print "errcode: %02x %02x" % (sw1,sw2)
 
 
    def printSolutionForUnknownTag(self,taglist):

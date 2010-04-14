@@ -10,10 +10,13 @@ def findNumberInString(cmd):
 def stringToArray(cmd):
     try:
        apdu = []
-       index = 0
-       while index < len(cmd):
-             apdu.append(int(cmd[index:index+2],16))
-             index += 3
+       apdu_str = [cmd]
+       for separator in (' ',',',':'):
+           if cmd.split(separator)[0] != cmd:
+               apdu_str = cmd.split(separator)
+               break
+       for i in range(len(apdu_str)):
+           apdu.append(int(apdu_str[i],16))
        return apdu
     except ValueError:
        #incorrect format of apdu may cause this type of exception

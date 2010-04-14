@@ -10,7 +10,7 @@ UNKNOWN = 'Unknown'
 #-------------------------------------------------------------------------------
 #readerTypes--------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-readerTypes = (ARYGON,TOUCHATAG,OMNIKEY_CARDMAN_5321) = ('ARYGON NFC/MIFARE DESKTOP READER','TOUCHATAG','OMNIKEY_CARDMAN_5321')
+readerTypes = (ARYGON,TOUCHATAG,OMNIKEY_CARDMAN_5321) = ('ARYGON NFC/MIFARE DESKTOP READER','TOUCHATAG','OMNIKEY_CARDMAN_5321 CL-INTERFACE')
 
 
 #-------------------------------------------------------------------------------

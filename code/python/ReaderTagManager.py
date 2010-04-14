@@ -147,6 +147,10 @@ class readerTagManager:
        #check if there are still events that not yet be got
        self.lock.acquire()
        if self.newEventNum > 0:
+           #-----------------------------------------------------
+           if DEBUG:
+               Debug.printReadableInfo('RTM',': has a new event!')
+           #-----------------------------------------------------
            self.lock.release()
            return True
        else:
@@ -156,6 +160,10 @@ class readerTagManager:
 
 
    def getNewEvent(self):
+       #------------------------------------------------------------------------
+       if DEBUG:
+          Debug.printReadableInfo('RTM',': the event is acked by application.')
+       #------------------------------------------------------------------------
        self.lock.acquire()
        self.newEventNum -= 1
        event = self.rtmEventList[0]

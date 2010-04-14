@@ -52,7 +52,7 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
          atr = self.connection.getATR()
          #----------------------------------------------------------------------------------------------------------------
          if DEBUG:
-              Debug.printTransmitInfo(self.commandSet["getUID"])
+              Debug.printTransmitInfo(toHexString(self.commandSet["getUID"]))
          #----------------------------------------------------------------------------------------------------------------
          tagUID,sw1,sw2 = self.doTransmition(self.connection,self.commandSet["getUID"],self.protocol)
          #----------------------------------------------------------------------------------------------------------------
@@ -93,10 +93,6 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
      def readMifareUltralight(self):
           self.connect(self.connection)
           self.enterAPDU()
-          #----------------------------------------------------------------------------------------------------------------
-          if DEBUG:
-                Debug.printReadableInfo(self.readername," stops polling for tags.")
-          #----------------------------------------------------------------------------------------------------------------
           tagData = []
           for i in range(16):
                self.commandSet['readMifareUltralight'].append(i)
@@ -106,10 +102,6 @@ class OMNIKEY_Cardman5321(pcsc_reader.PCSC_Reader):
                self.commandSet['readMifareUltralight'].pop()
                tagData.append(data[0:4])
           self.backToNormal()
-          #----------------------------------------------------------------------------------------------------------------
-          if DEBUG:
-                 Debug.printReadableInfo(self.readername," continues polling for tags.")
-          #----------------------------------------------------------------------------------------------------------------
           return tagData
 
      @staticmethod

@@ -176,7 +176,7 @@ class userInterface:
        print "exit-------------------------------------exit the program"
 
    def printShowExpertUserOptions(self):
-       print "\n--------------------=======-------------------------------------"
+       print "\n---------------------------------------------------------------"
        print "help------------------------------------get expert user help text"
        print "normal-------------------------------back to the normal user mode"
        print "please enter apdu as the following format(hex):          "

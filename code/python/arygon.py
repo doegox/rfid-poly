@@ -110,7 +110,7 @@ class ARYGON(pcsc_reader.PCSC_Reader):
           if sysName == 'nt':
                if string.find(readerName,'ARYGON Technologies AG CL Reader 0001') == 0:
                   return True
-               else:
+          elif sysName == 'posix':
                   return False
           else:
                raise NotImplementedError,"Sorry, this operating system is not supported by our software."

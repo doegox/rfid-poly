@@ -46,3 +46,6 @@ Hardware = (PN531,PN532,PN533) = ('PN531','PN532','PN533')
 #-------------------------------------------------------------------------------
 externalTools = (CARDSELECT,ISOTYPE,READMIFARE1K,READMIFAREULTRA,READMIFARESIMPLE) = ('CARDSELECT.py','ISOTYPE.py','READMIFARE1K.py','READMIFAREULTRA.py','READMIFARESIMPLE.py')
 
+#-------------------------------------------------------------------------------
+apduErrors = (APDU_ERROR_TYPE_A, APDU_ERROR_TYPE_B) = ('The apdu is not in bytes','The byte value is not in hexadecimal')
+

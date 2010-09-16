@@ -2,6 +2,7 @@
 #debugging.py
 
 from smartcard.util import *
+import os
 
 try:
    from WConio import *
@@ -19,7 +20,11 @@ class Debug:
             textcolor(LIGHTRED)
         except:
             pass
+        if os.name == 'posix':
+           print '\033[31m'
         print "Tx: %s" % Info
+        if os.name == 'posix':
+           print '\033[30m'
         try:
             textcolor(BLACK)
         except:
@@ -31,7 +36,11 @@ class Debug:
             textcolor(LIGHTRED)
         except:
             pass
+        if os.name == 'posix':
+           print '\033[31m'
         print "Rx: %s" % Info
+        if os.name == 'posix':
+           print '\033[30m'
         try:
             textcolor(BLACK)
         except:
@@ -43,7 +52,11 @@ class Debug:
             textcolor(LIGHTRED)
         except:
             pass
+        if os.name == 'posix':
+           print '\033[31m'
         print "SW1:%02x,SW2:%02x" % (ByteOne,ByteTwo)
+        if os.name == 'posix':
+           print '\033[30m'
         try:
             textcolor(BLACK)
         except:
@@ -55,7 +68,11 @@ class Debug:
             textcolor(LIGHTRED)
         except:
             pass
+        if os.name == 'posix':
+           print '\033[31m'
         print "%s%s" % (obj,eventInfo)
+        if os.name == 'posix':
+           print '\033[30m'
         try:
             textcolor(BLACK)
         except:
@@ -66,7 +83,9 @@ class Debug:
             textcolor(LIGHTRED)
         except:
             pass
-        print "The APDU you entered is: %s" % apdu
+        if os.name == 'posix':
+           print '\033[31m'
+        print "The APDU you entered is: %s" % toHexString(apdu)
         if len(apdu) < 4:
            print "The APDU is illegal and it may cause exceptions." 
         else:
@@ -77,6 +96,8 @@ class Debug:
                print toHexString(apdu[4:]).ljust(20,' ')
            except:
                print 'EMPTY'.ljust(20,' ')
+        if os.name == 'posix':
+           print '\033[30m'
         try:
             textcolor(BLACK)
         except:

@@ -227,8 +227,8 @@ class userInterface:
    def printUnImplementedTag(self,readername):
        print "The tag is recognized by %s but we haven't implement the tag for this reader, sorry for that." % readername
 
-   def printUnrecognizedAPDUCommand(self):
-       print "Sorry, this reader doesn't support this kind of APDU. "
+   def printUnrecognizedAPDUCommand(self,error):
+       print error
 
    def printUnknownCommand(self):
        print "\n---------------------------------------------------------------------------------"

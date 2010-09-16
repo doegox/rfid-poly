@@ -70,26 +70,43 @@ class ARYGON(pcsc_reader.PCSC_Reader):
               elif hex(atr[14]) == NN[MIFARE_ULTRALIGHT]:
                   return Mifare_Ultralight(toHexString(tagUID),self.getATR(),self.reader.name)
               else:
+                  #-------------------------------------------------------------------------------------------------------
+                  if DEBUG:
+                      Debug.printReadableInfo(self.readername,': found an unknown storage card!')
+                  #-------------------------------------------------------------------------------------------------------
                   return ( UnknownTag(toHexString(tagUID),self.getATR(),self.reader.name) )
          else:
+              #-----------------------------------------------------------------------------------------------------------
+              if DEBUG:
+                   Debug.printReadableInfo(self.readername,': found an unknown smart card!')
+              #-----------------------------------------------------------------------------------------------------------
               return ( UnknownTag(toHexString(tagUID),self.getATR(),self.reader.name) ) 
 
     def getReaderInfo(self):
          return self.readerInfo
 
     def transmitAPDU(self,apdu):
-         self.connect(self.connection)
+         try:
+            self.connect(self.connection)
+         except smartcard.Exceptions.NoCardException:
+           #------------------------------------------------------
+           if DEBUG:
+               Debug.printReadableInfo("ExceptionFromARYGONReaderClass"," : The reason might be an ARYGON Reader with no tag on it.")
+           #------------------------------------------------------
+           return 'No tag is found.',0xff,0xff
+         except:
+           assert(False)
          #----------------------------------------------------------------------------------------------------------------
          if DEBUG:
-              Debug.printTransmitInfo(apdu)
+              Debug.printTransmitInfo(toHexString(apdu))
          #----------------------------------------------------------------------------------------------------------------
          result,sw1,sw2 = self.doTransmition(self.connection,apdu,self.protocol)
          #----------------------------------------------------------------------------------------------------------------
          if DEBUG:
-              Debug.printReceiveInfo(result)
+              Debug.printReceiveInfo(toHexString(result))
               Debug.printStatusByte(sw1,sw2)
          #----------------------------------------------------------------------------------------------------------------
-         return result,sw1,sw2
+         return toHexString(result),sw1,sw2
 
     def readMifareUltralight(self):
           self.enterAPDU()
@@ -111,6 +128,7 @@ class ARYGON(pcsc_reader.PCSC_Reader):
                if string.find(readerName,'ARYGON Technologies AG CL Reader 0001') == 0:
                   return True
           elif sysName == 'posix':
+                  #For Debian Linux, we haven't implemented this reader because we can't install the driver for that.
                   return False
           else:
                raise NotImplementedError,"Sorry, this operating system is not supported by our software."

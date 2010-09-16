@@ -17,16 +17,19 @@ def stringToArray(cmd):
                break
        for s in apdu_str:
            if len(s) > 2:
-               return None
+               return APDU_ERROR_TYPE_A
        for i in range(len(apdu_str)):
-           if int(apdu_str[i],16) > 255:
-               return None
            apdu.append(int(apdu_str[i],16))
        return apdu
     except ValueError:
-       #incorrect format of apdu may cause this type of exception
-       return None
+       #not all the bytes are in hexadecimal
+       return APDU_ERROR_TYPE_B
     except:
+       #---------------------------------------------------------------------------------------------------
+       if DEBUG:
+           Debug.printReadableInfo('ErrorFromDataHandlerStringToArrayMethod',': the algorithm is still not perfect.')
+           Debug.printReadableInfo(cmd,': find problem when get this APDU.')
+       #---------------------------------------------------------------------------------------------------
        assert(False)
 
 def findTagsNotInEnum(tagList):
